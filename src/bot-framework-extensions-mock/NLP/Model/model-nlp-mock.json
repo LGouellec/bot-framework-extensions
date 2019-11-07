@@ -1,0 +1,429 @@
+﻿{
+   "Name":"Model NLP Mock Luis Recognizer",
+  "Intents": [
+    {
+      "Name": "CreateJira"
+    },
+    {
+      "Name": "Test"
+    },
+    {
+      "Name": "Information"
+    },
+    {
+      "Name": "BadUsage"
+    },
+    {
+      "Name": "End"
+    },
+    {
+      "Name": "Help"
+    },
+    {
+      "Name": "Cancel"
+    },
+    {
+      "Name": "SearchInformation"
+    },
+    {
+      "Name": "Begin"
+    }
+  ],
+  "Entities":[
+    {
+      "Values": [
+        "Girafon",
+        "Centreon",
+        "OGU2",
+        "GIRAF AVC",
+        "GIRAF APC",
+        "OSCAR NG",
+        "SAUFI"
+      ],
+      "Name": "Application",
+      "StartIndex": 0,
+      "StopIndex": 0
+    },
+      {
+         "Values":[
+            "CAR",
+            "BKR",
+            "BBG",
+            "CNO",
+            "UMO",
+            "UFR",
+            "NKE"
+         ],
+         "Name":"SiteCode",
+         "StartIndex":0,
+         "StopIndex":0
+      },
+	  {
+	  	  "Name": "LoginUsage"
+	  },
+	  {
+	  	  "Name": "PasswordUsage"
+	  },
+	  {
+		  "Name": "Criticity",
+		  "StartIndex": 0,
+		  "StopIndex": 0,
+		  "Values": [
+			"Major",
+			"Minor",
+			"Blocker"
+		  ]
+	  }
+  ],
+  "Utterances": [
+    {
+      "Text": "help me",
+      "Intent": {
+        "Name": "Help"
+      }
+    },
+    {
+      "Text": "Can i help me please",
+      "Intent": {
+        "Name": "Help"
+      }
+    },
+    {
+      "Text": "cancel workflow",
+      "Intent": {
+        "Name": "Cancel"
+      }
+    },
+    {
+      "Text": "quit",
+      "Intent": {
+        "Name": "Cancel"
+      }
+    },
+    {
+      "Text": "cancel",
+      "Intent": {
+        "Name": "Cancel"
+      }
+    },
+    {
+      "Text": "can you try with username:fx12168 and password: Michelin/1 please ?",
+      "Intent": {
+        "Name": "BadUsage"
+      },
+      "Entities": [
+        {
+          "Name": "LoginUsage",
+          "StartIndex": 26,
+          "StopIndex": 33
+        },
+        {
+          "Name": "PasswordUsage",
+          "StartIndex": 48,
+          "StopIndex": 58
+        }
+      ]
+    },
+    {
+      "Text": "login: admin mdp: passwd",
+      "Intent": {
+        "Name": "BadUsage"
+      },
+      "Entities": [
+        {
+          "Name": "LoginUsage",
+          "StartIndex": 7,
+          "StopIndex": 12
+        },
+        {
+          "Name": "PasswordUsage",
+          "StartIndex": 18,
+          "StopIndex": 24
+        }
+      ]
+    },
+    {
+      "Text": "user: method password: passwd",
+      "Intent": {
+        "Name": "BadUsage"
+      },
+      "Entities": [
+        {
+          "Name": "LoginUsage",
+          "StartIndex": 6,
+          "StopIndex": 12
+        },
+        {
+          "Name": "PasswordUsage",
+          "StartIndex": 23,
+          "StopIndex": 29
+        }
+      ]
+    },
+    {
+      "Text": "user: method password: Michelin/1",
+      "Intent": {
+        "Name": "BadUsage"
+      },
+      "Entities": [
+        {
+          "Name": "LoginUsage",
+          "StartIndex": 6,
+          "StopIndex": 12
+        },
+        {
+          "Name": "PasswordUsage",
+          "StartIndex": 23,
+          "StopIndex": 33
+        }
+      ]
+    },
+    {
+      "Text": "can you give me your credentials ?",
+      "Intent": {
+        "Name": "BadUsage"
+      }
+    },
+    {
+      "Text": "here is credentials for connection : ip 10.125.123.142 login : fx12345 password : toto123",
+      "Intent": {
+        "Name": "BadUsage"
+      },
+      "Entities": [
+        {
+          "Name": "LoginUsage",
+          "StartIndex": 63,
+          "StopIndex": 70
+        },
+        {
+          "Name": "PasswordUsage",
+          "StartIndex": 82,
+          "StopIndex": 89
+        }
+      ]
+    },
+    {
+      "Text": "i have a problem with my application ogu2",
+      "Intent": {
+        "Name": "CreateJira"
+      },
+      "Entities": [
+        {
+          "Name": "Application",
+          "StartIndex": 37,
+          "StopIndex": 41
+        }
+      ]
+    },
+    {
+      "Text": "i have a problem with my application srvp",
+      "Intent": {
+        "Name": "CreateJira"
+      },
+      "Entities": [
+        {
+          "Name": "Application",
+          "StartIndex": 37,
+          "StopIndex": 41
+        }
+      ]
+    },
+    {
+      "Text": "my application doesn't work",
+      "Intent": {
+        "Name": "CreateJira"
+      },
+      "Entities": [
+
+      ]
+    },
+    {
+      "Text": "srvp doesn't send message anymore",
+      "Intent": {
+        "Name": "CreateJira"
+      },
+      "Entities": [
+        {
+          "Name": "Application",
+          "StartIndex": 0,
+          "StopIndex": 3
+        }
+      ]
+    },
+    {
+      "Text": "i have a problem in cno",
+      "Intent": {
+        "Name": "CreateJira"
+      },
+      "Entities": [
+        {
+          "Name": "SiteCode",
+          "StartIndex": 20,
+          "StopIndex": 23
+        }
+      ]
+    },
+    {
+      "Text": "my girafon application is not working in cno",
+      "Intent": {
+        "Name": "CreateJira"
+      },
+      "Entities": [
+        {
+          "Name": "Application",
+          "StartIndex": 3,
+          "StopIndex": 10
+        },
+        {
+          "Name": "SiteCode",
+          "StartIndex": 41,
+          "StopIndex": 44
+        }
+      ]
+    },
+    {
+      "Text": "there is a bug with ogu2",
+      "Intent": {
+        "Name": "CreateJira"
+      },
+      "Entities": [
+        {
+          "Name": "Application",
+          "StartIndex": 20,
+          "StopIndex": 23
+        }
+      ]
+    },
+    {
+      "Text": "i need create a jira",
+      "Intent": {
+        "Name": "CreateJira"
+      },
+      "Entities": [
+
+      ]
+    },
+    {
+      "Text": "i have a problem with my girafon",
+      "Intent": {
+        "Name": "CreateJira"
+      },
+      "Entities": [
+        {
+          "Name": "Application",
+          "StartIndex": 25,
+          "StopIndex": 32
+        }
+      ]
+    },
+    {
+      "Text": "test",
+      "Intent": {
+        "Name": "Test"
+      },
+      "Entities": [
+
+      ]
+    },
+    {
+      "Text": "i want to do some test",
+      "Intent": {
+        "Name": "Test"
+      },
+      "Entities": [
+
+      ]
+    },
+    {
+      "Text": "I have a major Problem",
+      "Intent": {
+        "Name": "CreateJira"
+      },
+      "Entities": [
+        {
+          "Name": "Criticity",
+          "StartIndex": 9,
+          "StopIndex": 14
+        }
+      ]
+    },
+    {
+      "Text": "thanks, it's good for me",
+      "Intent": {
+        "Name": "End"
+      },
+      "Entities": [
+
+      ]
+    },
+    {
+      "Text": "thanks",
+      "Intent": {
+        "Name": "End"
+      },
+      "Entities": [
+
+      ]
+    },
+    {
+      "Text": "do you have some example of barcode",
+      "Intent": {
+        "Name": "SearchInformation"
+      },
+      "Entities": [
+
+      ]
+    },
+    {
+      "Text": "I search Information about support oscarNG ",
+      "Intent": {
+        "Name": "SearchInformation"
+      },
+      "Entities": [
+
+      ]
+    },
+    {
+      "Text": "I search Information about support Giraf APC ",
+      "Intent": {
+        "Name": "SearchInformation"
+      },
+      "Entities": [
+      ]
+    },
+    {
+      "Text": "I search Information about support Giraf AVC ",
+      "Intent": {
+        "Name": "SearchInformation"
+      },
+      "Entities": [
+      ]
+    },
+    {
+      "Text": "I search Information",
+      "Intent": {
+        "Name": "SearchInformation"
+      },
+      "Entities": [
+      ]
+    },
+    {
+      "Text": "hi",
+      "Intent": {
+        "Name": "Begin"
+      },
+      "Entities": [
+      ]
+    },
+    {
+      "Text": "Hello",
+      "Intent": {
+        "Name": "Begin"
+      },
+      "Entities": [
+      ]
+    }
+
+
+  ]
+}
