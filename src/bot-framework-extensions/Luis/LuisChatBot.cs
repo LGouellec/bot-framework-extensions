@@ -3,7 +3,7 @@ using bot_framework_extensions.Converter;
 using bot_framework_extensions.Dialog;
 using bot_framework_extensions.Extension;
 using bot_framework_extensions.Recognizer;
-using bot_framework_extensions.Repository.Interfaces;
+using bot_framework_extensions.Repository;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Schema;

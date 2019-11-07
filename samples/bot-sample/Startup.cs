@@ -21,13 +21,6 @@ namespace bot_sample
 
         public IConfiguration Configuration { get; }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
-        {
-            app.UseDefaultFiles()
-                .UseStaticFiles()
-                .UseBotFramework();
-        }
-
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
@@ -49,8 +42,7 @@ namespace bot_sample
 
             app.UseDefaultFiles();
             app.UseStaticFiles();
-
-            app.UseMvc();
+            app.UseBotFramework();
         }
     }
 }

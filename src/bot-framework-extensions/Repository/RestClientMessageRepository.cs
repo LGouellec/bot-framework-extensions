@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using bot_framework_extensions.Options;
+﻿using bot_framework_extensions.Options;
 using Microsoft.Extensions.Options;
 using RestSharp;
+using System;
+using System.Threading.Tasks;
 
 namespace bot_framework_extensions.Repository
 {
@@ -43,12 +40,6 @@ namespace bot_framework_extensions.Repository
         }
 
         public override string RepositoryName => "rest";
-
-        public override async Task<IEnumerable<MessageConversation>> GetConversation(string conversationID)
-        {
-            // TO IMPLEMENT
-            return await Task.FromResult(Enumerable.Empty< MessageConversation>());
-        }
 
         public override async Task SaveMessageAsync(string conversationID, string message)
         {

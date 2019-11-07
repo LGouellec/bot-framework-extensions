@@ -48,6 +48,8 @@ namespace bot_framework_extensions.Analyzer
             _options = options;
         }
 
+        internal void UseLuisModelLanguage(string luisModelLanguage) => toLanguage = luisModelLanguage;
+
         public async Task<string> Analyze(ContextAnalyzer ctx, string text)
         {
             string host = _options.endPoint;

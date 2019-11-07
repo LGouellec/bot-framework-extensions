@@ -9,6 +9,7 @@ namespace bot_framework_extensions.Recognizer
     {
         public LuisApplication LuisApplication { get; set; }
         public LuisPredictionOptions LuisPrediction { get; set; }
+        public string LuisModelLanguage { get; set; } = "en-US";
         public bool IncludeApiResults { get; set; } = false;
         public bool UseSpellService { get; set; } = false;
         public bool UseTranslateService { get; set; } = false;

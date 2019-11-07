@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace bot_framework_extensions.Analyzer
+﻿namespace bot_framework_extensions.Analyzer
 {
     public class ContextAnalyzer
     {

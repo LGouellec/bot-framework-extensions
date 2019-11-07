@@ -1,8 +1,5 @@
 ﻿using bot_framework_extensions.Options;
-using bot_framework_extensions.Repository.Interfaces;
 using Microsoft.Extensions.Options;
-using MongoDB.Driver;
-using System;
 using System.Threading.Tasks;
 
 namespace bot_framework_extensions.Repository
@@ -19,7 +16,5 @@ namespace bot_framework_extensions.Repository
         }
 
         public abstract Task SaveMessageAsync(string conversationID, string message);
-
-        public abstract Task<System.Collections.Generic.IEnumerable<MessageConversation>> GetConversation(string conversationID);
     }
 }

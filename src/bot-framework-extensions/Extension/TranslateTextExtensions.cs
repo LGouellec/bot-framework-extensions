@@ -1,9 +1,7 @@
 ﻿using bot_framework_extensions.Converter;
+using bot_framework_extensions.State;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Schema;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 

@@ -1,5 +1,4 @@
-﻿using bot_framework_extensions.Middleware;
-using bot_framework_extensions.Repository.Interfaces;
+﻿using bot_framework_extensions.Repository;
 using Microsoft.Bot.Builder;
 using System.Threading;
 using System.Threading.Tasks;

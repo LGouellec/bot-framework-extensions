@@ -4,5 +4,13 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>bot_framework_extensions_mock</RootNamespace>
   </PropertyGroup>
+  
+      <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <LangVersion>7.1</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\bot-framework-extensions\bot-framework-extensions.csproj" />
+  </ItemGroup>
 
 </Project>

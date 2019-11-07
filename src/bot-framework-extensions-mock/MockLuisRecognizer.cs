@@ -1,14 +1,11 @@
-﻿using ai_chatbot_support_crosscutting.Recognizer;
-using ai_chatbot_support_mock.NLP;
+﻿using ai_chatbot_support_mock.NLP;
 using ai_chatbot_support_mock.NLP.Model;
+using bot_framework_extensions.Recognizer;
 using Microsoft.Azure.CognitiveServices.Language.LUIS.Runtime.Models;
 using Microsoft.Bot.Builder;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 

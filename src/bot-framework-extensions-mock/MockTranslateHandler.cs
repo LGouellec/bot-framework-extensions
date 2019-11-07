@@ -1,7 +1,4 @@
-﻿using ai_chatbot_support_crosscutting.Converter;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using bot_framework_extensions.Converter;
 using System.Threading.Tasks;
 
 namespace ai_chatbot_support_mock

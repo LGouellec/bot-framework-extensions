@@ -25,7 +25,7 @@ namespace ai_chatbot_support_mock.NLP
             if (intent.HasValue)
                 return (intent.Value.Key, intent.Value.Value);
             else
-                return default;
+                return (null, 0d);
         }
     }
 }

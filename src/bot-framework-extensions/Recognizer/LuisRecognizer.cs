@@ -1,4 +1,5 @@
 ﻿using bot_framework_extensions.Analyzer;
+using bot_framework_extensions.State;
 using Microsoft.Bot.Builder;
 using System;
 using System.Collections;
@@ -60,6 +61,9 @@ namespace bot_framework_extensions.Recognizer
         {
             if (_middlewares.OfType<T>().Any())
                 return this;
+
+            if (typeof(T) is TranslateAnalyzer)
+                (analyzer as TranslateAnalyzer).UseLuisModelLanguage(Options.LuisModelLanguage);
 
             _middlewares.Add(analyzer);
             return this;

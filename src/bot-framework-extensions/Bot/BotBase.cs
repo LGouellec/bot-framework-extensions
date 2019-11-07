@@ -2,7 +2,6 @@
 using bot_framework_extensions.Dialog;
 using bot_framework_extensions.Extension;
 using bot_framework_extensions.Repository;
-using Microsoft.Azure.CognitiveServices.Language.LUIS.Runtime.Models;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Extensions.Logging;
@@ -15,32 +14,55 @@ namespace bot_framework_extensions.Bot
 {
     public abstract class BotBase : IBot
     {
-        private delegate Task InternalMiddleware(ITurnContext turnContext, NextDelegate next, CancellationToken cancellationToken = default);
-
-        private readonly IDialogFactory _dialogFactory;
-        private readonly IMessageRepository _messageRepository;
-        private readonly ITranslateHandler _translateHandler;
+        protected delegate Task InternalMiddleware(ITurnContext turnContext, NextDelegate next, CancellationToken cancellationToken = default);
 
         private readonly IList<InternalMiddleware> internalMiddlewares = new List<InternalMiddleware>();
 
         protected DialogSet _dialogs;
         protected readonly ILogger _logger;
 
+        #region Property
+
+        public IDialogFactory DialogFactory { get; }
+        public IMessageRepository MessageRepository { get; }
+        public ITranslateHandler TranslateHandler { get; }
+
+        #endregion
+
+
         public BotBase(ITranslateHandler translateHandler, IMessageRepository messageRepository, IDialogFactory dialogFactory, ILogger<BotBase> logger)
         {
             _logger = logger;
-            _dialogFactory = dialogFactory;
-            _messageRepository = messageRepository;
-            _translateHandler = translateHandler;
-            internalMiddlewares.Add(SecureMiddleware);
-            internalMiddlewares.Add(CancelMiddleware);
-            internalMiddlewares.Add(HelpMiddleware);
+            DialogFactory = dialogFactory;
+            MessageRepository = messageRepository;
+            TranslateHandler = translateHandler;
         }
+
+        #region Ctor
+
+        public BotBase(ITranslateHandler translateHandler, IMessageRepository messageRepository, IDialogFactory dialogFactory)
+                :this(translateHandler, messageRepository, dialogFactory, null)
+        {
+        }
+
+        public BotBase(ITranslateHandler translateHandler, IMessageRepository messageRepository)
+                : this(translateHandler, messageRepository, null, null)
+        {
+        }
+
+        public BotBase(ITranslateHandler translateHandler)
+                : this(translateHandler, null, null, null)
+        {
+        }
+
+        public BotBase() : this(null) { }
+
+        #endregion
 
         public async Task OnTurnAsync(ITurnContext turnContext, CancellationToken cancellationToken = default)
         {
             var context = new TurnContextAdapter(turnContext, _logger);
-            context.UseMessageRepository(_messageRepository).UseTranslateHandler(_translateHandler);
+            context.UseMessageRepository(MessageRepository).UseTranslateHandler(TranslateHandler);
                 
             CompleteDialogSet(context);
 
@@ -71,70 +93,10 @@ namespace bot_framework_extensions.Bot
 
         #region Internal Methods Middlewares
 
-        protected virtual async Task SecureMiddleware(ITurnContext turnContext, NextDelegate next, CancellationToken cancellationToken = default)
+        protected BotBase AddInternalMiddleware(InternalMiddleware middleware)
         {
-            var result = turnContext.Get<RecognizerResult>();
-            if (result != null)
-            {
-                // maybe not only top scoring intent
-                (string intent, double score) = result.GetTopScoringIntent();
-                if (intent.Equals("BadUsage"))
-                {
-                    string text = turnContext.Activity.Text;
-                    var luisResult = result.Properties["luisResult"] as LuisResult;
-                    foreach (var entitie in luisResult?.Entities)
-                    {
-                        text = text.Replace(entitie.Entity, string.Concat(Enumerable.Repeat("*", entitie.Entity.Length)));
-                    }
-                    turnContext.Activity.Text = text;
-
-                    await turnContext.SendActivityAsync("Warning bad usage, it's forbidden to send password, login by skype or other chats service");
-                    await turnContext.SendActivityAsync("Some sensitive information has been erased and/or replaced.");
-                    await turnContext.SendActivityAsync("TODO : Display usage of chatbot ...");
-                }
-            }
-
-            await next(cancellationToken);
-        }
-
-        protected virtual async Task CancelMiddleware(ITurnContext turnContext, NextDelegate next, CancellationToken cancellationToken = default)
-        {
-            var result = turnContext.Get<RecognizerResult>();
-            if (result != null)
-            {
-                // maybe not only top scoring intent
-                (string intent, double score) = result.GetTopScoringIntent();
-                if (intent.Equals("Cancel"))
-                {
-                    var dialogContext = await _dialogs.CreateContextAsync(turnContext, cancellationToken);
-                    await dialogContext.CancelDialogs(cancellationToken);
-                    await dialogContext.BeginDialogAsync(nameof(CancelDialog), null, cancellationToken);
-                }
-                else
-                    await next(cancellationToken);
-            }
-            else
-                await next(cancellationToken);
-        }
-
-        protected virtual async Task HelpMiddleware(ITurnContext turnContext, NextDelegate next, CancellationToken cancellationToken = default)
-        {
-            var result = turnContext.Get<RecognizerResult>();
-            if (result != null)
-            {
-                // maybe not only top scoring intent
-                (string intent, double score) = result.GetTopScoringIntent();
-                if (intent.Equals("Help"))
-                {
-                    var dialogContext = await _dialogs.CreateContextAsync(turnContext, cancellationToken);
-                    await dialogContext.CancelDialogs(cancellationToken);
-                    await dialogContext.BeginDialogAsync(nameof(HelpDialog), null, cancellationToken);
-                }
-                else
-                    await next(cancellationToken);
-            }
-            else
-                await next(cancellationToken);
+            internalMiddlewares.Add(middleware);
+            return this;
         }
 
         protected virtual async Task RunMiddleware(ITurnContext turnContext, CancellationToken cancellationToken = default)

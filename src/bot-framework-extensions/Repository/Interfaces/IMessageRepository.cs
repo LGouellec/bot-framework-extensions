@@ -7,6 +7,5 @@ namespace bot_framework_extensions.Repository
     {
         string RepositoryName { get; }
         Task SaveMessageAsync(string conversationID, string message);
-        Task<IEnumerable<MessageConversation>> GetConversation(string conversationID);
     }
 }
