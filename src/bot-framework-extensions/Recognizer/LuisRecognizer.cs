@@ -24,19 +24,7 @@ namespace bot_framework_extensions.Recognizer
         public virtual void BuildLuisRecognizer(Action<LuisRecognizerOptions> action)
         {
             action(Options);
-            var proxy = new WebProxy()
-            {
-                Address = new Uri("http://141.194.11.225:8000/"),
-
-                UseDefaultCredentials = false,
-
-                // *** These creds are given to the proxy server, not the web server ***
-                //Credentials = new NetworkCredential(
-                //userName: _options.user,
-                //password: _options.pwd)
-            };
-            HttpClientHandler httpClientHandler = new HttpClientHandler() { Proxy = proxy };
-            _internalRecognizer = new Microsoft.Bot.Builder.AI.Luis.LuisRecognizer(Options.LuisApplication, Options.LuisPrediction, Options.IncludeApiResults, httpClientHandler);
+            _internalRecognizer = new Microsoft.Bot.Builder.AI.Luis.LuisRecognizer(Options.LuisApplication, Options.LuisPrediction, Options.IncludeApiResults);
         }
         public async Task<RecognizerResult> RecognizeAsync(ITurnContext turnContext, CancellationToken cancellationToken)
         {

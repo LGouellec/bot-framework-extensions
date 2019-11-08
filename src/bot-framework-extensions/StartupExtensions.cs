@@ -18,10 +18,10 @@ namespace bot_framework_extensions
 {
     public static class StartupExtensions
     {
-        public static IServiceCollection AddChatBot<TBot>(this IServiceCollection services, IConfiguration configuration, Action<ChatBotFrameworkOptions> actionChatBotFrameworkOptions) where TBot : class, IBot
+        public static IServiceCollection AddChatBot<TBot>(this IServiceCollection services, IConfiguration configuration, Action<ChatBotFrameworkOptions> actionChatBotFrameworkOptions = null) where TBot : class, IBot
         {
             ChatBotFrameworkOptions options = new ChatBotFrameworkOptions();
-            actionChatBotFrameworkOptions(options);
+            actionChatBotFrameworkOptions?.Invoke(options);
 
             services.AddOptions();
             services.Configure<SpellOptions>(configuration.GetSection("spell"));

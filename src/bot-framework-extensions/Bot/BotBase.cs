@@ -18,7 +18,7 @@ namespace bot_framework_extensions.Bot
 
         private readonly IList<InternalMiddleware> internalMiddlewares = new List<InternalMiddleware>();
 
-        protected DialogSet _dialogs;
+        protected DialogSet Dialogs { get; set; }
         protected readonly ILogger _logger;
 
         #region Property
@@ -81,11 +81,11 @@ namespace bot_framework_extensions.Bot
 
         private void CompleteDialogSet(ITurnContext context)
         {
-            if (_dialogs != null)
+            if (Dialogs != null)
             {
                 foreach (var d in DialogFormCaching._dialogs.Where(kp => kp.Key.Equals(context.Activity.Conversation.Id)))
-                    if (_dialogs.Find(d.Value.Id) == null)
-                        _dialogs.Add(d.Value);
+                    if (Dialogs.Find(d.Value.Id) == null)
+                        Dialogs.Add(d.Value);
             }
         }
 
@@ -108,7 +108,7 @@ namespace bot_framework_extensions.Bot
         {
             if (index < internalMiddlewares.Count - 1)
                 await internalMiddlewares[index](turnContext, async (token) => { await Run(turnContext, index + 1, cancellationToken); }, cancellationToken);
-            else
+            else if(internalMiddlewares.Count > 0)
                 await internalMiddlewares[index](turnContext, async (token) => { await Task.CompletedTask; }, cancellationToken);
         }
 

@@ -27,6 +27,11 @@ namespace bot_framework_extensions.Luis
 
         #region Ctor
 
+        public LuisChatBot()
+            : this(null, null, null, null, null, null)
+        {
+        }
+
         public LuisChatBot(ITranslateHandler translateHandler, IMessageRepository messageRepository, IDialogFactory dialogFactory, ILogger<BotBase> logger)
             : base(translateHandler, messageRepository, dialogFactory, logger)
         {
@@ -39,6 +44,35 @@ namespace bot_framework_extensions.Luis
             _recognizer = recognizer;
             _textConverter = textConverter;
         }
+
+        #region Derived Ctor
+
+        public LuisChatBot(ITranslateHandler translateHandler, IMessageRepository messageRepository, IDialogFactory dialogFactory, ILuisRecognizer recognizer, ITextConverter textConverter)
+            : this(translateHandler, messageRepository, dialogFactory, recognizer, textConverter, null)
+        {
+        }
+
+        public LuisChatBot(ITranslateHandler translateHandler, IMessageRepository messageRepository, IDialogFactory dialogFactory, ILuisRecognizer recognizer)
+            : this(translateHandler, messageRepository, dialogFactory, recognizer, null, null)
+        {
+        }
+
+        public LuisChatBot(ITranslateHandler translateHandler, IMessageRepository messageRepository, IDialogFactory dialogFactory)
+            : this(translateHandler, messageRepository, dialogFactory, null, null, null)
+        {
+        }
+
+        public LuisChatBot(ITranslateHandler translateHandler, IMessageRepository messageRepository)
+            : this(translateHandler, messageRepository, null, null, null, null)
+        {
+        }
+
+        public LuisChatBot(ITranslateHandler translateHandler)
+            : this(translateHandler, null, null, null, null, null)
+        {
+        }
+
+        #endregion
 
         #endregion
 
@@ -55,28 +89,33 @@ namespace bot_framework_extensions.Luis
             if (_textConverter != null)
                 turnContext.Inject(_textConverter);
 
-            var dialogContext = await _dialogs.CreateContextAsync(turnContext, cancellationToken);
-            if (turnContext.Activity.Type == ActivityTypes.Message)
+            if (Dialogs != null)
             {
-                var results = await dialogContext.ContinueDialogAsync(cancellationToken);
-
-                if ((results.Status == DialogTurnStatus.Cancelled || results.Status == DialogTurnStatus.Empty)
-                      || (results.Status == DialogTurnStatus.Complete && dialogContext.ActiveDialog == null))
-                    // Test not recognize luis when finishing active dialog
-                if (results.Status == DialogTurnStatus.Cancelled || results.Status == DialogTurnStatus.Empty)
+                var dialogContext = await Dialogs.CreateContextAsync(turnContext, cancellationToken);
+                if (turnContext.Activity.Type == ActivityTypes.Message)
                 {
-                    DialogFormCaching._dialogs.Remove(turnContext.Activity.Conversation.Id);
-                    var foundDialog = _dialogs.Find(turnContext.Activity.Text);
-                    if (foundDialog != null)
-                    {
-                        await dialogContext.BeginDialogAsync(foundDialog.Id, null, cancellationToken);
-                    }
-                    else
-                    {
-                        var result = await Recognize(turnContext, cancellationToken);
-                        if (!result)
+                    var results = await dialogContext.ContinueDialogAsync(cancellationToken);
+
+                    if ((results.Status == DialogTurnStatus.Cancelled || results.Status == DialogTurnStatus.Empty)
+                          || (results.Status == DialogTurnStatus.Complete && dialogContext.ActiveDialog == null))
+                        // Test not recognize luis when finishing active dialog
+                        if (results.Status == DialogTurnStatus.Cancelled || results.Status == DialogTurnStatus.Empty)
+                        {
+                            DialogFormCaching._dialogs.Remove(turnContext.Activity.Conversation.Id);
+                            var foundDialog = Dialogs.Find(turnContext.Activity.Text);
+                            if (foundDialog != null)
+                            {
+                                await dialogContext.BeginDialogAsync(foundDialog.Id, null, cancellationToken);
+                            }
+                            else
+                            {
+                                var result = await Recognize(turnContext, cancellationToken);
+                                if (!result)
+                                    await OnTurn(turnContext, cancellationToken);
+                            }
+                        }
+                        else
                             await OnTurn(turnContext, cancellationToken);
-                    }
                 }
                 else
                     await OnTurn(turnContext, cancellationToken);
@@ -111,7 +150,7 @@ namespace bot_framework_extensions.Luis
 
         private async Task<bool> Recognize(ITurnContext turnContext, CancellationToken cancellationToken)
         {
-            var dialogContext = await _dialogs.CreateContextAsync(turnContext, cancellationToken);
+            var dialogContext = await Dialogs.CreateContextAsync(turnContext, cancellationToken);
             RecognizerResult result = turnContext.Get<RecognizerResult>();
             if (result != null)
             {

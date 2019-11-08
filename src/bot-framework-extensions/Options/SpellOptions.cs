@@ -10,7 +10,5 @@ namespace bot_framework_extensions.Options
         public string path { get; set; }
         public string @params { get; set; }
         public string key { get; set; }
-        public string user { get; set; }
-        public string pwd { get; set; }
     }
 }

@@ -8,7 +8,5 @@ namespace bot_framework_extensions.Options
     {
         public string endPoint { get; set; }
         public string Key { get; set; }
-        public string user { get; set; }
-        public string pwd { get; set; }
     }
 }
