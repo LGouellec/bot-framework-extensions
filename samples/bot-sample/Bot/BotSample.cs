@@ -13,12 +13,9 @@ namespace bot_sample.Bot
 {
     public class BotSample : LuisChatBot
     {
-        private BotAccessors accessors;
-
         public BotSample(ITranslateHandler translateHandler, IDialogFactory dialogFactory, ILuisRecognizer recognizer, ITextConverter textConverter, BotAccessors botAccessors) :
             base(translateHandler, null, dialogFactory, recognizer, textConverter)
         {
-            accessors = botAccessors;
             Dialogs = dialogFactory.UseDialogAccessor(botAccessors.DialogStateAccessor)
                         .Create<StockDialog>()
                         .Create<TextPrompt>("prompt")

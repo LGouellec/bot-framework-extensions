@@ -20,7 +20,9 @@ namespace bot_sample.Bot
                 .Field(nameof(StockExchangeQuery.Society), (state) => string.IsNullOrEmpty(state?.Society))
                 .OnCompletion(async (c, q) =>
                 {
-                    await c.Context.SendActivityAsync($"{q?.Society} : 15USD", "notTranslate");
+                    Random rd = new Random();
+                    double price = rd.NextDouble() * rd.Next(5, 30);
+                    await c.Context.SendActivityAsync($"{q.Society} : {price} USD", "notTranslate");
                     c.ClearCache();
                 });
             return builder.Build();
