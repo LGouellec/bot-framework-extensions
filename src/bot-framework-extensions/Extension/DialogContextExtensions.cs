@@ -11,5 +11,10 @@ namespace bot_framework_extensions.Extension
             for (int i = 0; i < dialogContext.Stack.Count; ++i)
                 await dialogContext.EndDialogAsync(null, cancellationToken);
         }
+
+        public static void ClearCache(this DialogContext context, CancellationToken cancellationToken = default)
+        {
+            DialogFormCaching._dialogs.Remove(context.Context.Activity.Conversation.Id);
+        }
     }
 }

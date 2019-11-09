@@ -7,27 +7,25 @@ using System.Collections.Generic;
 
 namespace bot_sample.Dialogs
 {
-
     public class StockDialog : WaterfallDialog
     {
-        internal class StockDialogResult
-        {
-            public string Compagny { get; set; }
-            public float Price { get; set; }
-
-        }
-
         public StockDialog(string dialogId, IEnumerable<WaterfallStep> steps = null) 
             : base(dialogId, steps)
         {
             AddStep(async (context, token) =>
             {
                 StockExchangeBuider builder = new StockExchangeBuider();
-                var form = await builder.Build(context.Context);
+                var form = builder.Build(context.Context);
                 var dialog = FormDialog.FromForm(() => form, FormOptions.PromptInStart);
 
-                await context.Call(dialog, context.Options as RecognizerResult);
-                return await context.EndDialogAsync();
+                return await context.Call(dialog, context.Options as RecognizerResult);
+            })
+            .AddStep(async (c, t) =>
+            {
+                return await c.PromptAsync("prompt", new PromptOptions
+                {
+                    Prompt = c.Context.Activity.CreateReply("Thanks you ! Bye !")
+                });
             });
         }
 

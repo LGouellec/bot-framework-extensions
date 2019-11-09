@@ -1,10 +1,7 @@
 ﻿using Bot.Builder.Community.Dialogs.FormFlow;
+using bot_framework_extensions.Extension;
 using Microsoft.Bot.Builder;
-using Microsoft.Bot.Builder.Dialogs;
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace bot_sample.Bot
 {
@@ -17,17 +14,16 @@ namespace bot_sample.Bot
 
     internal class StockExchangeBuider
     {
-        private async Task Action(DialogContext c, StockExchangeQuery query)
-        {
-            await c.Context.SendActivityAsync("Apple : 15USD", "notTranslate");
-            await c.EndDialogAsync();
-        }
-
-        public async Task<IForm<StockExchangeQuery>> Build(ITurnContext context)
+        public IForm<StockExchangeQuery> Build(ITurnContext context)
         {
             var builder = new FormBuilder<StockExchangeQuery>()
-                .Field(nameof(StockExchangeQuery.Society), (state) => string.IsNullOrEmpty(state?.Society));
-            return await Task.FromResult(builder.OnCompletion(this.Action).Build());
+                .Field(nameof(StockExchangeQuery.Society), (state) => string.IsNullOrEmpty(state?.Society))
+                .OnCompletion(async (c, q) =>
+                {
+                    await c.Context.SendActivityAsync($"{q?.Society} : 15USD", "notTranslate");
+                    c.ClearCache();
+                });
+            return builder.Build();
         }
     }
 }

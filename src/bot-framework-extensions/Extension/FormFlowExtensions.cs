@@ -21,14 +21,14 @@ namespace bot_framework_extensions.Extension
 
     public static class FormFlowExtensions
     {
-        public static async Task Call<T>(this DialogContext context, object entities = null, object options = null, CancellationToken cancellationToken = default)
+        public static async Task<DialogTurnResult> Call<T>(this DialogContext context, object entities = null, object options = null, CancellationToken cancellationToken = default)
             where T : class
         {
             Microsoft.Bot.Builder.Dialogs.Dialog diag = context.Dialogs.Find(typeof(T).Name);
             if (diag == null)
-                return;
+                return new DialogTurnResult(DialogTurnStatus.Cancelled);
 
-            if(diag is FormDialog<T>)
+            if (diag is FormDialog<T>)
             {
                 FormDialog<T> formDialog = diag as FormDialog<T>;
                 var field = formDialog.GetType().GetField("_entities", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
@@ -39,20 +39,20 @@ namespace bot_framework_extensions.Extension
                 }
             }
 
-            await context.BeginDialogAsync(typeof(T).Name, options, cancellationToken);
+            return await context.BeginDialogAsync(typeof(T).Name, options, cancellationToken);
         }
 
-        public static async Task Call<T>(this DialogContext context, FormDialog<T> form, object entities = null, object options = null, CancellationToken cancellationToken = default)
+        public static async Task<DialogTurnResult> Call<T>(this DialogContext context, FormDialog<T> form, object entities = null, object options = null, CancellationToken cancellationToken = default)
             where T : class
         {
             Microsoft.Bot.Builder.Dialogs.Dialog diag = context.Dialogs.Find(typeof(T).Name);
             if (diag != null)
-                await context.Call<T>(entities, options, cancellationToken);
+                return await context.Call<T>(entities, options, cancellationToken);
             else
             {
                 context.Dialogs.Add(form);
                 DialogFormCaching._dialogs.Add(context.Context.Activity.Conversation.Id, form);
-                await context.Call<T>(entities, options, cancellationToken);
+                return await context.Call<T>(entities, options, cancellationToken);
             }
         }
 

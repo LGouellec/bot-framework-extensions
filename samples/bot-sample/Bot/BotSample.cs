@@ -1,5 +1,4 @@
-﻿using Bot.Builder.Community.Dialogs.FormFlow;
-using bot_framework_extensions.Converter;
+﻿using bot_framework_extensions.Converter;
 using bot_framework_extensions.Dialog;
 using bot_framework_extensions.Luis;
 using bot_framework_extensions.Recognizer;
@@ -9,7 +8,6 @@ using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Schema;
 using System.Threading;
 using System.Threading.Tasks;
-using bot_framework_extensions.Extension;
 
 namespace bot_sample.Bot
 {
@@ -23,7 +21,7 @@ namespace bot_sample.Bot
             accessors = botAccessors;
             Dialogs = dialogFactory.UseDialogAccessor(botAccessors.DialogStateAccessor)
                         .Create<StockDialog>()
-                        .Create<TextPrompt>("promptSociety")
+                        .Create<TextPrompt>("prompt")
                         .Build();
         }
 
