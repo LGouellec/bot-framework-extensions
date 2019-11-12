@@ -65,8 +65,18 @@ namespace bot_framework_extensions.Dialog
             {
                 if (param.ParameterType.Equals(typeof(string)) && param.Name.ToLower().Contains("id"))
                     ctorParameters.Add(diaglogId);
-                else if (parameters != null && parameters.Select(o => o.GetType()).Contains(param.ParameterType))
-                    ctorParameters.Add(parameters.FirstOrDefault(o => o.GetType().Equals(param.ParameterType)));
+                else if (parameters != null && (parameters.Select(o => o.GetType()).Contains(param.ParameterType) ||
+                    parameters.Any(p => p.GetType().GetInterfaces().Contains(param.ParameterType))))
+                {
+                    var tP = parameters.FirstOrDefault(o => o.GetType().Equals(param.ParameterType));
+                    if(tP != null)
+                        ctorParameters.Add(tP);
+                    else
+                    {
+                        var tPb = parameters.FirstOrDefault(p => p.GetType().GetInterfaces().Contains(param.ParameterType));
+                        ctorParameters.Add(tPb);
+                    }
+                }
                 else
                     ctorParameters.Add(ResolveByIoC(param.ParameterType));
             }
